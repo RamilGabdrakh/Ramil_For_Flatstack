@@ -26,9 +26,11 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:recyclerview-v7:22.1.+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':vksdk_library')
     compile('com.lsjwzh:materialloadingprogressbar:0.5.5-RELEASE')
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.github.orangegangsters:swipy:1.2.0@aar'
+    compile 'com.google.code.gson:gson:2.3.1'
 }

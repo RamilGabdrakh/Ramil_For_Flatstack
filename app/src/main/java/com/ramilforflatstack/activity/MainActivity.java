@@ -12,6 +12,7 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKCaptchaDialog;
+import com.vk.sdk.util.VKUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -49,13 +50,13 @@ public class MainActivity extends VkActivity {
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
             Log.e("my_tag", "onReceiveNewToken");
-            NewsFeedActivity.start(MainActivity.this);
+            openNewsFeedActivity();
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
             Log.e("my_tag", "onAcceptUserToken");
-            NewsFeedActivity.start(MainActivity.this);
+            openNewsFeedActivity();
         }
     };
 
@@ -64,14 +65,20 @@ public class MainActivity extends VkActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
         ButterKnife.inject(this);
+        //String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
 
         progressBar.setShowArrow(true);
 
         VKSdk.initialize(mListener, Long.toString(BuildConfig.VK_API_KEY));
         if (VKSdk.isLoggedIn()) {
-            NewsFeedActivity.start(this);
+            openNewsFeedActivity();
         } else {
             VKSdk.authorize(sMyScope);
         }
+    }
+
+    private void openNewsFeedActivity(){
+        finish();
+        NewsFeedActivity.start(this);
     }
 }
