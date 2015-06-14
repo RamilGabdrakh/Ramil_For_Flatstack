@@ -11,15 +11,24 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
+        debug {
+            buildConfigField "long", "VK_API_KEY", "4957414"
+        }
+
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "long", "VK_API_KEY", "4957414"
         }
     }
 }
 
+
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':vksdk_library')
+    compile('com.lsjwzh:materialloadingprogressbar:0.5.5-RELEASE')
+    compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'com.github.orangegangsters:swipy:1.2.0@aar'
 }
