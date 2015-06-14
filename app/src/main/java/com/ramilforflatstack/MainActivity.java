@@ -12,6 +12,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
+
+        String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
     }
 
 
