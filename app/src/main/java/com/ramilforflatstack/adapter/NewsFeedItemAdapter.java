@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.ramilforflatstack.R;
-import com.ramilforflatstack.tools.DateUtils;
 import com.ramilforflatstack.content.NewsFeedItem;
 import com.ramilforflatstack.fragment.NewsFullFragment;
+import com.ramilforflatstack.tools.DateUtils;
 
 import java.util.List;
 

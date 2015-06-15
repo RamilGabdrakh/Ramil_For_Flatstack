@@ -6,8 +6,6 @@ import com.ramilforflatstack.content.NewsFeedItem;
 import com.ramilforflatstack.model.Attachment;
 import com.ramilforflatstack.model.Autor;
 import com.ramilforflatstack.model.FeedItem;
-import com.vk.sdk.api.model.VKApiPhoto;
-import com.vk.sdk.api.model.VKAttachments;
 
 import java.util.ArrayList;
 import java.util.List;

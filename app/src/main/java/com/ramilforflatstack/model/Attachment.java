@@ -3,7 +3,6 @@ package com.ramilforflatstack.model;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Ramil on 15.06.2015.

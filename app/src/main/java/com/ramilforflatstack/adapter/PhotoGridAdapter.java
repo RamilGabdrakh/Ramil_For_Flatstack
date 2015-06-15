@@ -2,7 +2,6 @@ package com.ramilforflatstack.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +9,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.koushikdutta.urlimageviewhelper.UrlImageViewCallback;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.ramilforflatstack.R;
 import com.ramilforflatstack.model.Attachment;
-import com.ramilforflatstack.tools.OttoBus;
-import com.ramilforflatstack.tools.events.PhotoLoadet;
 
 import java.util.List;
 

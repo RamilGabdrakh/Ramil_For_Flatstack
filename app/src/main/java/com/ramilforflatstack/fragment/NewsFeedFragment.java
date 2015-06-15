@@ -20,7 +20,6 @@ import com.ramilforflatstack.adapter.NewsFeedItemAdapter;
 import com.ramilforflatstack.content.NewsFeedItem;
 import com.ramilforflatstack.response.NewsFeedResponse;
 import com.ramilforflatstack.response.NewsFeedResponseContent;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;

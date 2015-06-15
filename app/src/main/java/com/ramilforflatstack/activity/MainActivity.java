@@ -12,7 +12,6 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKCaptchaDialog;
-import com.vk.sdk.util.VKUtil;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
