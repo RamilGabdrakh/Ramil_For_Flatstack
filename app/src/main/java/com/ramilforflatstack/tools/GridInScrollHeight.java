@@ -1,5 +1,6 @@
-package com.ramilforflatstack.Utils;
+package com.ramilforflatstack.tools;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
@@ -23,6 +24,7 @@ public class GridInScrollHeight {
             int rowCount = (int) Math.ceil(1d * listAdapter.getCount() / itemsInRow);
             int totalHeight = rowCount * listItem.getMeasuredHeight() + (rowCount) * spacing;
 
+            Log.e("mytag", "totalHeight = " + totalHeight);
             ViewGroup.LayoutParams params = gridView.getLayoutParams();
             params.height = totalHeight;
             gridView.setLayoutParams(params);

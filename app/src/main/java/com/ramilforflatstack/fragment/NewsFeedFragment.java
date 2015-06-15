@@ -70,7 +70,7 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mNewsFeedItemAdapter = new NewsFeedItemAdapter(items, getActivity());
+        mNewsFeedItemAdapter = new NewsFeedItemAdapter(items, (android.support.v7.app.AppCompatActivity) getActivity());
 
         mSwipeLayout.setRefreshing(true);
         mEndTime = System.currentTimeMillis()/1000;

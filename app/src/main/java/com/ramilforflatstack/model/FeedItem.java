@@ -5,7 +5,10 @@ import android.text.TextUtils;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 import com.google.gson.annotations.SerializedName;
+import com.ramilforflatstack.content.NewsFeedItem;
+import com.ramilforflatstack.content.NewsFullItem;
 import com.ramilforflatstack.response.AttachmentResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKAttachments;
@@ -59,26 +62,37 @@ public class FeedItem extends Model implements Serializable{
         return postId;
     }
 
+    public long getLikeCount() {
+        return likeCount;
+    }
+
     public List<Attachment> getMyAttachments() {
         return myAttachments;
     }
 
+    public void setMyAttachments(List<Attachment> myAttachments) {
+        this.myAttachments = myAttachments;
+    }
+
     public void toRightModel(){
+        sourceId = Math.abs(sourceId);
         myAttachments = toAttachmentsModel(attachments, postId, sourceId);
         likeCount = likes.count;
     }
 
     private List<Attachment> toAttachmentsModel(List<AttachmentResponse> vkApiAttachments, long postId, long sourceId) {
         List<Attachment> result = new ArrayList<>();
-        for(AttachmentResponse attachment : vkApiAttachments) {
-            if (TextUtils.equals(attachment.getType(), VKAttachments.TYPE_PHOTO) ) {
-                VKApiPhoto photo = attachment.getPhoto();
+        if (vkApiAttachments != null) {
+            for(AttachmentResponse attachment : vkApiAttachments) {
+                if (TextUtils.equals(attachment.getType(), VKAttachments.TYPE_PHOTO) ) {
+                    VKApiPhoto photo = attachment.getPhoto();
 
-                Attachment myAttachment = new Attachment();
-                myAttachment.setPhotoUrl(photo.photo_604);
-                myAttachment.setPostId(postId);
-                myAttachment.setSourceId(sourceId);
-                result.add(myAttachment);
+                    Attachment myAttachment = new Attachment();
+                    myAttachment.setPhotoUrl(photo.photo_604);
+                    myAttachment.setPostId(postId);
+                    myAttachment.setSourceId(sourceId);
+                    result.add(myAttachment);
+                }
             }
         }
 

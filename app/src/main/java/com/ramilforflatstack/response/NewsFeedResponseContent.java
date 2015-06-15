@@ -28,14 +28,14 @@ public class NewsFeedResponseContent {
         for (int i = 0; i < items.size(); i++) {
 
             String message = items.get(i).getText();
-            long ownerId = items.get(i).getSourceId();
+            long ownerId = Math.abs(items.get(i).getSourceId());
             Autor autor = Autor.getById(ownerId);
             String title = autor.getName();
             String coverUrl = autor.getPhotoUrl();
             long date = items.get(i).getDate();
             long postId = items.get(i).getPostId();
 
-            NewsFeedItem item = new NewsFeedItem(postId, message, title, coverUrl, date);
+            NewsFeedItem item = new NewsFeedItem(postId, ownerId, message, title, coverUrl, date);
             result.add(item);
         }
         return result;
@@ -85,10 +85,12 @@ public class NewsFeedResponseContent {
             }
 
             for (Autor profile : profiles) {
+                profile.absId();
                 profile.save();
             }
 
             for (Autor group : groups) {
+                group.absId();
                 group.save();
             }
             ActiveAndroid.setTransactionSuccessful();

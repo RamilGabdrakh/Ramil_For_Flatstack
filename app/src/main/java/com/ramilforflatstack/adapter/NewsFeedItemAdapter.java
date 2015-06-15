@@ -1,18 +1,20 @@
 package com.ramilforflatstack.adapter;
 
-import android.app.Activity;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.ramilforflatstack.R;
-import com.ramilforflatstack.Utils.DateUtils;
+import com.ramilforflatstack.tools.DateUtils;
 import com.ramilforflatstack.content.NewsFeedItem;
+import com.ramilforflatstack.fragment.NewsFullFragment;
 
 import java.util.List;
 
@@ -22,9 +24,9 @@ import java.util.List;
 public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapter.ViewHolder> {
 
     private List<NewsFeedItem> mItems;
-    private Activity mActivity;
+    private AppCompatActivity mActivity;
 
-    public NewsFeedItemAdapter(List<NewsFeedItem> items, Activity activity) {
+    public NewsFeedItemAdapter(List<NewsFeedItem> items, AppCompatActivity activity) {
         this.mItems = items;
         this.mActivity = activity;
     }
@@ -37,7 +39,7 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
 
     @Override
     public void onBindViewHolder(NewsFeedItemAdapter.ViewHolder viewHolder, int i) {
-        NewsFeedItem item = mItems.get(i);
+        final NewsFeedItem item = mItems.get(i);
 
         String date = DateUtils.getTextDate(item.getDate());
 
@@ -50,7 +52,18 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
         viewHolder.mItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mActivity, "open news", Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putLong("Autor_id", item.getAutorId());
+                bundle.putLong("PostId", item.getPostId());
+
+                NewsFullFragment fragment = new NewsFullFragment();
+                fragment.setArguments(bundle);
+
+                mActivity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, fragment, NewsFullFragment.class.getName())
+                        .addToBackStack(NewsFullFragment.class.getName())
+                        .commit();
+
             }
         });
     }
@@ -61,7 +74,7 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
     }
 
     public NewsFeedItem getLastItem() {
-        return  mItems.get(getItemCount() - 1);
+        return mItems.get(getItemCount() - 1);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

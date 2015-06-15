@@ -7,13 +7,15 @@ public class NewsFeedItem {
     private static final int MESSAGE_MAX_LENGTH = 20;
 
     private long postId;
+    private long autorId;
     private String message;
     private String title;
     private String photoUrl;
     private long date;
 
-    public NewsFeedItem(long postId, String message, String title, String photoUrl, long date) {
+    public NewsFeedItem(long postId, long autorId, String message, String title, String photoUrl, long date) {
         this.postId = postId;
+        this.autorId = autorId;
         this.message = message;
         this.title = title;
         this.photoUrl = photoUrl;
@@ -46,5 +48,9 @@ public class NewsFeedItem {
 
     public long getPostId() {
         return postId;
+    }
+
+    public long getAutorId() {
+        return autorId;
     }
 }

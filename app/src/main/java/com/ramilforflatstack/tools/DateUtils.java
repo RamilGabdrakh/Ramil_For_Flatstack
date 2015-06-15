@@ -1,4 +1,4 @@
-package com.ramilforflatstack.Utils;
+package com.ramilforflatstack.tools;
 
 import java.util.Calendar;
 import java.util.Date;

@@ -48,4 +48,8 @@ public class Autor extends Model {
         }
         return autor;
     }
+
+    public void absId(){
+        id = Math.abs(id);
+    }
 }

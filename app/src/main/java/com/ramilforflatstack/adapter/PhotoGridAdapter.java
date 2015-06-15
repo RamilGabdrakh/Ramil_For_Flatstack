@@ -2,6 +2,7 @@ package com.ramilforflatstack.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.koushikdutta.urlimageviewhelper.UrlImageViewCallback;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.ramilforflatstack.R;
 import com.ramilforflatstack.model.Attachment;
+import com.ramilforflatstack.tools.OttoBus;
+import com.ramilforflatstack.tools.events.PhotoLoadet;
 
 import java.util.List;
 
@@ -51,9 +55,12 @@ public class PhotoGridAdapter extends BaseAdapter{
     public View getView(final int position, View convertView, ViewGroup parent) {
         View rowView = inflater.inflate(R.layout.item_photo_grid, null);
         ViewHolder holder = new ViewHolder(rowView);
-        final Attachment attachment = attachments.get(position);
 
-        UrlImageViewHelper.setUrlDrawable(holder.mPhoto, attachment.getPhotoUrl());
+        if (attachments.size() > position) {
+            Attachment attachment = attachments.get(position);
+
+            UrlImageViewHelper.setUrlDrawable(holder.mPhoto, attachment.getPhotoUrl(), mActivity.getResources().getDrawable(R.drawable.empty_cover));
+        }
 
         return rowView;
     }

@@ -1,4 +1,4 @@
-package com.ramilforflatstack.Utils;
+package com.ramilforflatstack.tools;
 
 /**
  * Created by Ramil on 15.06.2015.
