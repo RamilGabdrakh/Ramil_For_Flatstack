@@ -2,6 +2,7 @@ package com.ramilforflatstack.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,57 +47,16 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
     private SwipyRefreshLayoutDirection mDirection = SwipyRefreshLayoutDirection.TOP;
     private NewsFeedItemAdapter mNewsFeedItemAdapter;
     List<NewsFeedItem> items = new ArrayList<>();
+    VKRequest mRequest;
+    long mEndTime;
 
-    private VKRequest.VKRequestListener mListener = new VKRequest.VKRequestListener() {
+    protected static final int DELAY_SEC = 3000;
+    private Handler mHandler = new Handler();
+    private Runnable mPostRequest = new Runnable() {
         @Override
-        public void onComplete(VKResponse response) {
-            super.onComplete(response);
-
-            NewsFeedResponse resp = mGson.fromJson( response.responseString, NewsFeedResponse.class );
-            NewsFeedResponseContent content = resp.content;
-            Log.d("mytag", "resp" + response.responseString);
-
-            List<NewsFeedItem> newItems = content.toNewsList();
-
-            if (mDirection == SwipyRefreshLayoutDirection.TOP) {
-                items.clear();
-                items.addAll(newItems);
-            } else {
-                //merge
-
-                long lastPostId = mNewsFeedItemAdapter.getLastItem().getPostId();
-                boolean hasThisPost = false;
-                int i = 0;
-                while(!hasThisPost && i < newItems.size()) {
-                    hasThisPost = lastPostId == newItems.get(i).getPostId();
-                    i++;
-                }
-                if (hasThisPost) {
-                    while (lastPostId != newItems.get(0).getPostId()) {
-                        newItems.remove(0);
-                    }
-                    newItems.remove(0);
-                }
-                items.addAll(newItems);
-            }
-
-            mNewsFeedItemAdapter.notifyDataSetChanged();
-            mSwipeLayout.setRefreshing(false);
-        }
-
-        @Override
-        public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
-            super.attemptFailed(request, attemptNumber, totalAttempts);
-        }
-
-        @Override
-        public void onError(VKError error) {
-            super.onError(error);
-        }
-
-        @Override
-        public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
-            super.onProgress(progressType, bytesLoaded, bytesTotal);
+        public void run() {
+            mRequest = createRequest(mDirection);
+            mRequest.executeWithListener(new VkListener());
         }
     };
 
@@ -113,8 +73,10 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
         mNewsFeedItemAdapter = new NewsFeedItemAdapter(items, getActivity());
 
         mSwipeLayout.setRefreshing(true);
-        VKRequest request = new VKRequest("newsfeed.get", VKParameters.from("filters", "post", "count", "2"));
-        request.executeWithListener(mListener);
+        mEndTime = System.currentTimeMillis()/1000;
+        String endTime = Long.toString(mEndTime);
+        mRequest = new VKRequest("newsfeed.get", VKParameters.from("filters", "post", "count", "3", "end_time", endTime));
+        mRequest.executeWithListener(new VkListener());
 
         mRecyclerView.setAdapter(mNewsFeedItemAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -133,20 +95,75 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
     }
 
     @Override
+    public void onDetach() {
+        mHandler.removeCallbacks(mPostRequest);
+        super.onDetach();
+    }
+
+    @Override
     public void onRefresh(SwipyRefreshLayoutDirection direction) {
         Log.d("mytag", "Refresh triggered at "
                 + (direction == SwipyRefreshLayoutDirection.TOP ? "top" : "bottom"));
         mDirection = direction;
-        VKRequest request;
-        if (direction == SwipyRefreshLayoutDirection.TOP) {
-            request = new VKRequest("newsfeed.get", VKParameters.from("filters", "post", "count", "5"));
-        } else {
-            String endTime = Long.toString(mNewsFeedItemAdapter.getLastItem().getDate());
-            Log.d("mytag","end_time  = " + endTime);
-            request = new VKRequest("newsfeed.get", VKParameters.from("filters", "post", "count", "3", "end_time", endTime));
-        }
-        Log.d("mytag","params  = " + request.getMethodParameters().toString());
+        mRequest = createRequest(direction);
+        mRequest.executeWithListener(new VkListener());
+    }
 
-        request.executeWithListener(mListener);
+    private VKRequest createRequest(SwipyRefreshLayoutDirection direction) {
+        String endTime;
+        if (direction == SwipyRefreshLayoutDirection.TOP) {
+            mEndTime = System.currentTimeMillis()/1000;
+            Log.d("mytag","end_time  = " + mEndTime);;
+        } else {
+            mEndTime = mNewsFeedItemAdapter.getLastItem().getDate();
+            Log.d("mytag","end_time  = " + mEndTime);
+
+        }
+        Log.d("mytag","params  = " + mRequest.getMethodParameters().toString());
+
+        endTime = Long.toString(mEndTime);
+        return new VKRequest("newsfeed.get", VKParameters.from("filters", "post", "count", "3", "end_time", endTime));
+    }
+
+    private class VkListener extends VKRequest.VKRequestListener {
+        @Override
+        public void onComplete(VKResponse response) {
+            super.onComplete(response);
+
+            NewsFeedResponse resp = mGson.fromJson( response.responseString, NewsFeedResponse.class );
+            NewsFeedResponseContent content = resp.content;
+            Log.d("mytag", "resp" + response.responseString);
+
+            List<NewsFeedItem> newItems = content.toNewsList();
+
+            if(mEndTime < newItems.get(0).getDate()) {
+                mHandler.postDelayed(mPostRequest, DELAY_SEC);
+            } else {
+                if (mDirection == SwipyRefreshLayoutDirection.TOP) {
+                    items.clear();
+                    items.addAll(newItems);
+                } else {
+                    //merge
+
+                    long lastPostId = mNewsFeedItemAdapter.getLastItem().getPostId();
+                    boolean hasThisPost = false;
+                    int i = 0;
+                    while(!hasThisPost && i < newItems.size()) {
+                        hasThisPost = lastPostId == newItems.get(i).getPostId();
+                        i++;
+                    }
+                    if (hasThisPost) {
+                        while (lastPostId != newItems.get(0).getPostId()) {
+                            newItems.remove(0);
+                        }
+                        newItems.remove(0);
+                    }
+                    items.addAll(newItems);
+                }
+
+                mNewsFeedItemAdapter.notifyDataSetChanged();
+                mSwipeLayout.setRefreshing(false);
+            }
+        }
     }
 }

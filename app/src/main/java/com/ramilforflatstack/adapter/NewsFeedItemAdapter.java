@@ -51,9 +51,12 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
 
         String date;
         if(calendar.after(yesterday)) {
-            date = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
+            date = calendar.get(Calendar.HOUR_OF_DAY) + ":"
+                    + toLength(Integer.toString(calendar.get(Calendar.MINUTE)), 2);
         } else {
-            date = calendar.get(Calendar.DAY_OF_MONTH) + "." + calendar.get(Calendar.MONTH) + "." + calendar.get(Calendar.YEAR);
+            date = toLength(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)),2) + "."
+                    + toLength(Integer.toString(calendar.get(Calendar.MONTH)), 2) + "."
+                    + calendar.get(Calendar.YEAR);
         }
         viewHolder.mDate.setText(date);
         viewHolder.mTitle.setText(item.getTitle());
@@ -76,6 +79,14 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
 
     public NewsFeedItem getLastItem() {
         return  mItems.get(getItemCount() - 1);
+    }
+
+    private String toLength(String input, int length){
+        if (input.length() >= length) {
+            return input;
+        } else {
+            return toLength("0" + input, length);
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

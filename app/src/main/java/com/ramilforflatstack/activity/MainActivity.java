@@ -65,7 +65,10 @@ public class MainActivity extends VkActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
         ButterKnife.inject(this);
-        //String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
+//        String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
+//        for(String fingerprint : fingerprints) {
+//            Log.e("mytag", "fingerprint=" + fingerprint);
+//        }
 
         progressBar.setShowArrow(true);
 
