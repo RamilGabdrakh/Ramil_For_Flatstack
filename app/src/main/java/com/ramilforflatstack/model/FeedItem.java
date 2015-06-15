@@ -10,6 +10,9 @@ public class FeedItem {
     @SerializedName("source_id")
     private long sourceId;
 
+    @SerializedName("post_id")
+    private long postId;
+
     private long date;
 
     private String text;
@@ -24,5 +27,9 @@ public class FeedItem {
 
     public String getText() {
         return text;
+    }
+
+    public long getPostId() {
+        return postId;
     }
 }

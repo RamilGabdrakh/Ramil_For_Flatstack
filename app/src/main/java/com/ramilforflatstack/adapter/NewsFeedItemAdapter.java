@@ -13,13 +13,14 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.ramilforflatstack.R;
 import com.ramilforflatstack.content.NewsFeedItem;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by ramil-g on 14.06.15.
  */
 public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapter.ViewHolder> {
-
 
     private List<NewsFeedItem> mItems;
     private Activity mActivity;
@@ -39,9 +40,24 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
     public void onBindViewHolder(NewsFeedItemAdapter.ViewHolder viewHolder, int i) {
         NewsFeedItem item = mItems.get(i);
 
-        viewHolder.mDate.setText(item.getDate());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(item.getDate() * 1000));
+
+        Calendar yesterday = (Calendar) calendar.clone();
+        yesterday.set(Calendar.HOUR_OF_DAY, 0);
+        yesterday.set(Calendar.MINUTE, 0);
+        yesterday.set(Calendar.SECOND, 0);
+
+        String date;
+        if(calendar.after(yesterday)) {
+            date = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
+        } else {
+            date = calendar.get(Calendar.DAY_OF_MONTH) + "." + calendar.get(Calendar.MONTH) + "." + calendar.get(Calendar.YEAR);
+        }
+        viewHolder.mDate.setText(date);
         viewHolder.mTitle.setText(item.getTitle());
-        viewHolder.mMessage.setText(item.getMessage());
+        viewHolder.mMessage.setText(item.getShortMessage());
 
         UrlImageViewHelper.setUrlDrawable(viewHolder.mCover, item.getPhotoUrl());
 
@@ -56,6 +72,10 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    public NewsFeedItem getLastItem() {
+        return  mItems.get(getItemCount() - 1);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

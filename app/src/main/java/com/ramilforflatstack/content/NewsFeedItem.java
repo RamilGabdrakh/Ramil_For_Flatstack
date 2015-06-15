@@ -4,16 +4,19 @@ package com.ramilforflatstack.content;
  * Created by ramil-g on 14.06.15.
  */
 public class NewsFeedItem {
+    private static final int MESSAGE_MAX_LENGTH = 20;
 
+    private long postId;
     private String message;
     private String title;
-    private String PhotoUrl;
-    private String date;
+    private String photoUrl;
+    private long date;
 
-    public NewsFeedItem(String message, String title, String photoUrl, String date) {
+    public NewsFeedItem(long postId, String message, String title, String photoUrl, long date) {
+        this.postId = postId;
         this.message = message;
         this.title = title;
-        PhotoUrl = photoUrl;
+        this.photoUrl = photoUrl;
         this.date = date;
     }
 
@@ -21,15 +24,27 @@ public class NewsFeedItem {
         return message;
     }
 
+    public String getShortMessage() {
+        String shortMessage = getMessage();
+        if (shortMessage.length() > MESSAGE_MAX_LENGTH) {
+            shortMessage = shortMessage.substring(0, MESSAGE_MAX_LENGTH) + "...";
+        }
+        return  shortMessage;
+    }
+
     public String getTitle() {
         return title;
     }
 
     public String getPhotoUrl() {
-        return PhotoUrl;
+        return photoUrl;
     }
 
-    public String getDate() {
+    public long getDate() {
         return date;
+    }
+
+    public long getPostId() {
+        return postId;
     }
 }

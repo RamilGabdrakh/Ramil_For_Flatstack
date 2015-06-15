@@ -33,23 +33,10 @@ public class NewsFeedResponseContent {
             Autor autor = Autor.getById(ownerId);
             String title = autor.getName();
             String coverUrl = autor.getPhotoUrl();
+            long date = items.get(i).getDate();
+            long postId = items.get(i).getPostId();
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date(items.get(i).getDate() * 1000));
-
-            Calendar yesterday = (Calendar) calendar.clone();
-            yesterday.set(Calendar.HOUR_OF_DAY, 0);
-            yesterday.set(Calendar.MINUTE, 0);
-            yesterday.set(Calendar.SECOND, 0);
-
-            String date;
-            if(calendar.after(yesterday)) {
-                date = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
-            } else {
-                date = calendar.get(Calendar.DAY_OF_MONTH) + "." + calendar.get(Calendar.MONTH) + "." + calendar.get(Calendar.YEAR);
-            }
-
-            NewsFeedItem item = new NewsFeedItem(message, title, coverUrl, date);
+            NewsFeedItem item = new NewsFeedItem(postId, message, title, coverUrl, date);
             result.add(item);
         }
         return result;

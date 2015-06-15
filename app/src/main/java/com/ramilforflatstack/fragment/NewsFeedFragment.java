@@ -43,7 +43,7 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
     SwipyRefreshLayout mSwipeLayout;
 
     private Gson mGson = new Gson();
-
+    private SwipyRefreshLayoutDirection mDirection = SwipyRefreshLayoutDirection.TOP;
     private NewsFeedItemAdapter mNewsFeedItemAdapter;
     List<NewsFeedItem> items = new ArrayList<>();
 
@@ -51,12 +51,33 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
         @Override
         public void onComplete(VKResponse response) {
             super.onComplete(response);
+
             NewsFeedResponse resp = mGson.fromJson( response.responseString, NewsFeedResponse.class );
             NewsFeedResponseContent content = resp.content;
-            List<NewsFeedItem> newItem = content.toNewsList();
-            items.clear();
-            for (int i = 0; i < newItem.size(); i++) {
-                items.add(newItem.get(i));
+            Log.d("mytag", "resp" + response.responseString);
+
+            List<NewsFeedItem> newItems = content.toNewsList();
+
+            if (mDirection == SwipyRefreshLayoutDirection.TOP) {
+                items.clear();
+                items.addAll(newItems);
+            } else {
+                //merge
+
+                long lastPostId = mNewsFeedItemAdapter.getLastItem().getPostId();
+                boolean hasThisPost = false;
+                int i = 0;
+                while(!hasThisPost && i < newItems.size()) {
+                    hasThisPost = lastPostId == newItems.get(i).getPostId();
+                    i++;
+                }
+                if (hasThisPost) {
+                    while (lastPostId != newItems.get(0).getPostId()) {
+                        newItems.remove(0);
+                    }
+                    newItems.remove(0);
+                }
+                items.addAll(newItems);
             }
 
             mNewsFeedItemAdapter.notifyDataSetChanged();
@@ -92,7 +113,7 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
         mNewsFeedItemAdapter = new NewsFeedItemAdapter(items, getActivity());
 
         mSwipeLayout.setRefreshing(true);
-        VKRequest request = new VKRequest("newsfeed.get", VKParameters.from("filters", "post"));
+        VKRequest request = new VKRequest("newsfeed.get", VKParameters.from("filters", "post", "count", "2"));
         request.executeWithListener(mListener);
 
         mRecyclerView.setAdapter(mNewsFeedItemAdapter);
@@ -115,8 +136,17 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
     public void onRefresh(SwipyRefreshLayoutDirection direction) {
         Log.d("mytag", "Refresh triggered at "
                 + (direction == SwipyRefreshLayoutDirection.TOP ? "top" : "bottom"));
+        mDirection = direction;
+        VKRequest request;
+        if (direction == SwipyRefreshLayoutDirection.TOP) {
+            request = new VKRequest("newsfeed.get", VKParameters.from("filters", "post", "count", "5"));
+        } else {
+            String endTime = Long.toString(mNewsFeedItemAdapter.getLastItem().getDate());
+            Log.d("mytag","end_time  = " + endTime);
+            request = new VKRequest("newsfeed.get", VKParameters.from("filters", "post", "count", "3", "end_time", endTime));
+        }
+        Log.d("mytag","params  = " + request.getMethodParameters().toString());
 
-        VKRequest request = new VKRequest("newsfeed.get", VKParameters.from("filters", "post"));
         request.executeWithListener(mListener);
     }
 }
