@@ -134,6 +134,7 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
             NewsFeedResponseContent content = resp.content;
             Log.d("mytag", "resp" + response.responseString);
 
+            content.save();
             List<NewsFeedItem> newItems = content.toNewsList();
 
             if(mEndTime < newItems.get(0).getDate()) {
