@@ -11,10 +11,9 @@ import android.widget.Toast;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.ramilforflatstack.R;
+import com.ramilforflatstack.Utils.DateUtils;
 import com.ramilforflatstack.content.NewsFeedItem;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,24 +39,8 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
     public void onBindViewHolder(NewsFeedItemAdapter.ViewHolder viewHolder, int i) {
         NewsFeedItem item = mItems.get(i);
 
+        String date = DateUtils.getTextDate(item.getDate());
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date(item.getDate() * 1000));
-
-        Calendar yesterday = (Calendar) calendar.clone();
-        yesterday.set(Calendar.HOUR_OF_DAY, 0);
-        yesterday.set(Calendar.MINUTE, 0);
-        yesterday.set(Calendar.SECOND, 0);
-
-        String date;
-        if(calendar.after(yesterday)) {
-            date = calendar.get(Calendar.HOUR_OF_DAY) + ":"
-                    + toLength(Integer.toString(calendar.get(Calendar.MINUTE)), 2);
-        } else {
-            date = toLength(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)),2) + "."
-                    + toLength(Integer.toString(calendar.get(Calendar.MONTH)), 2) + "."
-                    + calendar.get(Calendar.YEAR);
-        }
         viewHolder.mDate.setText(date);
         viewHolder.mTitle.setText(item.getTitle());
         viewHolder.mMessage.setText(item.getShortMessage());
@@ -79,14 +62,6 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
 
     public NewsFeedItem getLastItem() {
         return  mItems.get(getItemCount() - 1);
-    }
-
-    private String toLength(String input, int length){
-        if (input.length() >= length) {
-            return input;
-        } else {
-            return toLength("0" + input, length);
-        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

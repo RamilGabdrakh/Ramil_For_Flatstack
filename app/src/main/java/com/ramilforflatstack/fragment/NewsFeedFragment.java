@@ -113,7 +113,7 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
         String endTime;
         if (direction == SwipyRefreshLayoutDirection.TOP) {
             mEndTime = System.currentTimeMillis()/1000;
-            Log.d("mytag","end_time  = " + mEndTime);;
+            Log.d("mytag","end_time  = " + mEndTime);
         } else {
             mEndTime = mNewsFeedItemAdapter.getLastItem().getDate();
             Log.d("mytag","end_time  = " + mEndTime);
@@ -134,12 +134,12 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
             NewsFeedResponseContent content = resp.content;
             Log.d("mytag", "resp" + response.responseString);
 
-            content.save();
             List<NewsFeedItem> newItems = content.toNewsList();
 
             if(mEndTime < newItems.get(0).getDate()) {
                 mHandler.postDelayed(mPostRequest, DELAY_SEC);
             } else {
+                content.save();
                 if (mDirection == SwipyRefreshLayoutDirection.TOP) {
                     items.clear();
                     items.addAll(newItems);
