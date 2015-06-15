@@ -140,6 +140,7 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
                 mHandler.postDelayed(mPostRequest, DELAY_SEC);
             } else {
                 content.save();
+                newItems = content.toNewsList();
                 if (mDirection == SwipyRefreshLayoutDirection.TOP) {
                     items.clear();
                     items.addAll(newItems);
