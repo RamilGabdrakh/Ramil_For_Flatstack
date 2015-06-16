@@ -47,7 +47,7 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
         viewHolder.mTitle.setText(item.getTitle());
         viewHolder.mMessage.setText(item.getShortMessage());
 
-        UrlImageViewHelper.setUrlDrawable(viewHolder.mCover, item.getPhotoUrl());
+        UrlImageViewHelper.setUrlDrawable(viewHolder.mCover, item.getPhotoUrl(), R.drawable.placeholder);
 
         viewHolder.mItemView.setOnClickListener(new View.OnClickListener() {
             @Override

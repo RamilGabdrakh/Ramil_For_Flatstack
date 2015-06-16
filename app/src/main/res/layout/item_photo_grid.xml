@@ -11,7 +11,7 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/empty_cover"
+        android:src="@drawable/placeholder"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

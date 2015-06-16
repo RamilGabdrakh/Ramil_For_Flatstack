@@ -55,7 +55,7 @@ public class PhotoGridAdapter extends BaseAdapter{
         if (attachments.size() > position) {
             Attachment attachment = attachments.get(position);
 
-            UrlImageViewHelper.setUrlDrawable(holder.mPhoto, attachment.getPhotoUrl(), mActivity.getResources().getDrawable(R.drawable.empty_cover));
+            UrlImageViewHelper.setUrlDrawable(holder.mPhoto, attachment.getPhotoUrl(), R.drawable.placeholder);
         }
 
         return rowView;

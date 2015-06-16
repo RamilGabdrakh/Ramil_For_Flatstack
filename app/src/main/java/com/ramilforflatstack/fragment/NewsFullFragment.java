@@ -55,7 +55,7 @@ public class NewsFullFragment extends Fragment {
         long postId = getArguments().getLong("PostId");
 
         NewsFullItem content = NewsFullItem.generateFullNewsItem(autorId, postId);
-        UrlImageViewHelper.setUrlDrawable(mCover, content.getPhotoUrl());
+        UrlImageViewHelper.setUrlDrawable(mCover, content.getPhotoUrl(), R.drawable.placeholder);
         mTitle.setText(content.getTitle());
         mMessage.setText(content.getMessage());
 
