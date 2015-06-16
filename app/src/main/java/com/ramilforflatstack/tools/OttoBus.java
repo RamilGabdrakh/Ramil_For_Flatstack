@@ -1,6 +1,5 @@
 package com.ramilforflatstack.tools;
 
-import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.squareup.otto.Bus;

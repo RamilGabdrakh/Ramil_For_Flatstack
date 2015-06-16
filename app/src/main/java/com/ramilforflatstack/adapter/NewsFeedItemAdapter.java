@@ -1,7 +1,6 @@
 package com.ramilforflatstack.adapter;
 
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.ramilforflatstack.R;
 import com.ramilforflatstack.activity.NewsActivity;
 import com.ramilforflatstack.content.NewsFeedItem;
-import com.ramilforflatstack.fragment.NewsFullFragment;
 import com.ramilforflatstack.tools.CropSquareTransformation;
 import com.ramilforflatstack.tools.DateUtils;
 import com.squareup.picasso.Picasso;
