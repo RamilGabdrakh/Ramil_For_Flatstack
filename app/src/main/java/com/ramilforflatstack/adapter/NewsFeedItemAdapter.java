@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ramilforflatstack.R;
+import com.ramilforflatstack.activity.NewsActivity;
 import com.ramilforflatstack.content.NewsFeedItem;
 import com.ramilforflatstack.fragment.NewsFullFragment;
 import com.ramilforflatstack.tools.CropSquareTransformation;
@@ -57,18 +58,7 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
         viewHolder.mItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putLong("Autor_id", item.getAutorId());
-                bundle.putLong("PostId", item.getPostId());
-
-                NewsFullFragment fragment = new NewsFullFragment();
-                fragment.setArguments(bundle);
-
-                mActivity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, fragment, NewsFullFragment.class.getName())
-                        .addToBackStack(NewsFullFragment.class.getName())
-                        .commit();
-
+                NewsActivity.start(mActivity, item.getAutorId(), item.getPostId());
             }
         });
     }

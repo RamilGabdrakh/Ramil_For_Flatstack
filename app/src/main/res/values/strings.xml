@@ -4,6 +4,7 @@
     <string name="app_name">Ramil For Flatstack</string>
     <string name="authorize">Авторизация</string>
     <string name="news_feed">Новости</string>
+    <string name="news">Новость</string>
 
 
 </resources>
