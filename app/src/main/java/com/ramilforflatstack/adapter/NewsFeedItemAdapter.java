@@ -10,11 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.ramilforflatstack.R;
 import com.ramilforflatstack.content.NewsFeedItem;
 import com.ramilforflatstack.fragment.NewsFullFragment;
+import com.ramilforflatstack.tools.CropSquareTransformation;
 import com.ramilforflatstack.tools.DateUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -47,7 +48,11 @@ public class NewsFeedItemAdapter extends RecyclerView.Adapter<NewsFeedItemAdapte
         viewHolder.mTitle.setText(item.getTitle());
         viewHolder.mMessage.setText(item.getShortMessage());
 
-        UrlImageViewHelper.setUrlDrawable(viewHolder.mCover, item.getPhotoUrl(), R.drawable.placeholder);
+        Picasso.with(mActivity)
+                .load(item.getPhotoUrl())
+                .transform(new CropSquareTransformation())
+                .placeholder(R.drawable.placeholder)
+                .into(viewHolder.mCover);
 
         viewHolder.mItemView.setOnClickListener(new View.OnClickListener() {
             @Override

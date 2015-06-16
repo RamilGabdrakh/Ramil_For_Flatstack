@@ -2,7 +2,6 @@ package com.ramilforflatstack.fragment;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +10,15 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.ramilforflatstack.R;
 import com.ramilforflatstack.adapter.PhotoGridAdapter;
 import com.ramilforflatstack.content.NewsFullItem;
+import com.ramilforflatstack.tools.CropSquareTransformation;
 import com.ramilforflatstack.tools.DateUtils;
-import com.ramilforflatstack.tools.GridInScrollHeight;
 import com.ramilforflatstack.tools.OttoBus;
 import com.ramilforflatstack.tools.events.PhotoLoadet;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -44,6 +43,7 @@ public class NewsFullFragment extends Fragment {
     @InjectView(R.id.message)
     TextView mMessage;
 
+    private PhotoGridAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,25 +55,21 @@ public class NewsFullFragment extends Fragment {
         long postId = getArguments().getLong("PostId");
 
         NewsFullItem content = NewsFullItem.generateFullNewsItem(autorId, postId);
-        UrlImageViewHelper.setUrlDrawable(mCover, content.getPhotoUrl(), R.drawable.placeholder);
+        Picasso.with(getActivity())
+                .load(content.getPhotoUrl())
+                .transform(new CropSquareTransformation())
+                .placeholder(R.drawable.placeholder)
+                .into(mCover);
         mTitle.setText(content.getTitle());
         mMessage.setText(content.getMessage());
 
         String date = DateUtils.getTextDate(content.getDate());
         mDate.setText(date);
 
-        PhotoGridAdapter adapter = new PhotoGridAdapter(getActivity(), content.getAttachments());
-        mGridView.setAdapter(adapter);
+        mAdapter = new PhotoGridAdapter(getActivity(), content.getAttachments());
+        mGridView.setAdapter(mAdapter);
 
         return  view;
-    }
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                GridInScrollHeight.setGridViewHeightBasedOnChildren(mGridView, 3, 0);
-            }
-        });
     }
 
     @Override
@@ -88,10 +84,9 @@ public class NewsFullFragment extends Fragment {
         OttoBus.get().unregister(this);
     }
 
-
     @Subscribe
     public void onPhotoLoadet(PhotoLoadet event) {
-        GridInScrollHeight.setGridViewHeightBasedOnChildren(mGridView, 3, 0);
+        mAdapter.setGridViewHeightBasedOnChildren(mGridView, 3, 10);
     }
 
 }

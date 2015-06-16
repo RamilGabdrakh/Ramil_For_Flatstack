@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.squareup.otto.Bus;
 
-
 public final class OttoBus {
 
     private final Bus mBus;

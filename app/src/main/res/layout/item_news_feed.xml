@@ -18,7 +18,8 @@
             android:layout_height="75dp"
             android:id="@+id/cover"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/placeholder"/>
 
         <LinearLayout
