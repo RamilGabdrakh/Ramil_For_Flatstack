@@ -8,8 +8,7 @@ import android.support.v7.widget.Toolbar;
 import com.ramilforflatstack.R;
 import com.ramilforflatstack.fragment.NewsFeedFragment;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import droidkit.annotation.InjectView;
 
 /**
  * Created by Ramil on 14.06.2015.
@@ -27,7 +26,6 @@ public class NewsFeedActivity extends VkActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_news_feed);
-        ButterKnife.inject(this);
 
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_close_white_36dp);

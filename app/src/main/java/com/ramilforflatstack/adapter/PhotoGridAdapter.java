@@ -78,7 +78,9 @@ public class PhotoGridAdapter extends BaseAdapter {
                         @Override
                         public void onSuccess() {
                             Log.e("mytag", "onSuccess");
-                            OttoBus.get().post(new PhotoLoadet());
+
+                            PhotoLoadet event = new PhotoLoadet();
+                            OttoBus.get().post(event);
                         }
 
                         @Override

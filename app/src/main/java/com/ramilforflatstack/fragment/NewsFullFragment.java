@@ -2,6 +2,7 @@ package com.ramilforflatstack.fragment;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +21,7 @@ import com.ramilforflatstack.tools.events.PhotoLoadet;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import droidkit.annotation.InjectView;
 
 /**
  * Created by Ramil on 15.06.2015.
@@ -48,8 +48,13 @@ public class NewsFullFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fmt_news_full, container, false);
-        ButterKnife.inject(this, view);
 
+        return  view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         long autorId = getArguments().getLong("Autor_id");
         long postId = getArguments().getLong("PostId");
@@ -68,8 +73,6 @@ public class NewsFullFragment extends Fragment {
 
         mAdapter = new PhotoGridAdapter(getActivity(), content.getAttachments());
         mGridView.setAdapter(mAdapter);
-
-        return  view;
     }
 
     @Override

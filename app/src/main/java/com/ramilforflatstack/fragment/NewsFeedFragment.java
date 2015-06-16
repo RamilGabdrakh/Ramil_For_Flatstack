@@ -27,8 +27,7 @@ import com.vk.sdk.api.VKResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import droidkit.annotation.InjectView;
 
 
 /**
@@ -62,15 +61,15 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fmt_news_feed, container, false);
-        ButterKnife.inject(this, view);
 
         return  view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mNewsFeedItemAdapter = new NewsFeedItemAdapter(items, (android.support.v7.app.AppCompatActivity) getActivity());
+        super.onViewCreated(view, savedInstanceState);
 
+        mNewsFeedItemAdapter = new NewsFeedItemAdapter(items, (android.support.v7.app.AppCompatActivity) getActivity());
         mSwipeLayout.setRefreshing(true);
         mEndTime = System.currentTimeMillis()/1000;
         String endTime = Long.toString(mEndTime);

@@ -1,8 +1,11 @@
 package com.ramilforflatstack.tools;
 
+import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.squareup.otto.Bus;
+
+import droidkit.concurrent.MainQueue;
 
 public final class OttoBus {
 
@@ -17,7 +20,12 @@ public final class OttoBus {
     }
 
     public void post(final Object event) {
-        mBus.post(event);
+        MainQueue.invoke(new Runnable() {
+            @Override
+            public void run() {
+                mBus.post(event);
+            }
+        });
     }
 
     public void register(@NonNull Object object) {

@@ -13,8 +13,7 @@ import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKCaptchaDialog;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import droidkit.annotation.InjectView;
 
 
 public class MainActivity extends VkActivity {
@@ -63,7 +62,6 @@ public class MainActivity extends VkActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
-        ButterKnife.inject(this);
 //        String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
 //        for(String fingerprint : fingerprints) {
 //            Log.e("mytag", "fingerprint=" + fingerprint);
