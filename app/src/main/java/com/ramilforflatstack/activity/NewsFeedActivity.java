@@ -18,8 +18,8 @@ public class NewsFeedActivity extends VkActivity {
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
 
-    public static void start(Activity activity) {
-        activity.startActivity(new Intent(activity, NewsFeedActivity.class));
+    public static void start(Activity activity, int request) {
+        activity.startActivityForResult(new Intent(activity, NewsFeedActivity.class), request);
     }
 
     @Override

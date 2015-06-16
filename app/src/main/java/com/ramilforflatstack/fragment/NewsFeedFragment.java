@@ -16,10 +16,13 @@ import com.google.gson.Gson;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 import com.ramilforflatstack.R;
+import com.ramilforflatstack.activity.MainActivity;
 import com.ramilforflatstack.adapter.NewsFeedItemAdapter;
 import com.ramilforflatstack.content.NewsFeedItem;
 import com.ramilforflatstack.response.NewsFeedResponse;
 import com.ramilforflatstack.response.NewsFeedResponseContent;
+import com.ramilforflatstack.tools.NetworkUtils;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -139,30 +142,49 @@ public class NewsFeedFragment extends Fragment implements SwipyRefreshLayout.OnR
             } else {
                 content.save();
                 newItems = content.toNewsList();
-                if (mDirection == SwipyRefreshLayoutDirection.TOP) {
-                    items.clear();
-                    items.addAll(newItems);
-                } else {
-                    //merge
-
-                    long lastPostId = mNewsFeedItemAdapter.getLastItem().getPostId();
-                    boolean hasThisPost = false;
-                    int i = 0;
-                    while(!hasThisPost && i < newItems.size()) {
-                        hasThisPost = lastPostId == newItems.get(i).getPostId();
-                        i++;
-                    }
-                    if (hasThisPost) {
-                        while (lastPostId != newItems.get(0).getPostId()) {
-                            newItems.remove(0);
-                        }
-                        newItems.remove(0);
-                    }
-                    items.addAll(newItems);
-                }
+                merge(newItems);
 
                 mNewsFeedItemAdapter.notifyDataSetChanged();
                 mSwipeLayout.setRefreshing(false);
+            }
+        }
+
+        @Override
+        public void onError(VKError error) {
+            super.onError(error);
+            Log.e("my_tag", "onError");
+            if (!NetworkUtils.isNetworkAvailable(getActivity())) {
+                NetworkErrorPopup.show(getFragmentManager());
+                List<NewsFeedItem> newItems = NewsFeedItem.getNewsFeedItem(mEndTime, 3);
+                merge(newItems);
+                mNewsFeedItemAdapter.notifyDataSetChanged();
+                mSwipeLayout.setRefreshing(false);
+            } else {
+                getActivity().setResult(MainActivity.REAUHTORIZE);
+                getActivity().finish();
+            }
+        }
+
+        private void merge(List<NewsFeedItem> newItems){
+            if (mDirection == SwipyRefreshLayoutDirection.TOP) {
+                items.clear();
+                items.addAll(newItems);
+            } else {
+
+                long lastPostId = mNewsFeedItemAdapter.getLastItem().getPostId();
+                boolean hasThisPost = false;
+                int i = 0;
+                while(!hasThisPost && i < newItems.size()) {
+                    hasThisPost = lastPostId == newItems.get(i).getPostId();
+                    i++;
+                }
+                if (hasThisPost) {
+                    while (lastPostId != newItems.get(0).getPostId()) {
+                        newItems.remove(0);
+                    }
+                    newItems.remove(0);
+                }
+                items.addAll(newItems);
             }
         }
     }

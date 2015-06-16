@@ -12,8 +12,9 @@
     <color name="gray_text">#878787</color>
     <color name="toolbar_bkg">#0099CC</color>
 
-
-
+    <color name="white">#FFFFFF</color>
+    <color name="popup_title">#0077CC</color>
+    <color name="popup_text">#0099CC</color>
 
     <color name="news_item_bkg_color">#FFFFFF</color>
 

@@ -3,7 +3,6 @@ package com.ramilforflatstack.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,10 +76,7 @@ public class PhotoGridAdapter extends BaseAdapter {
                     .into(holder.mPhoto, new Callback() {
                         @Override
                         public void onSuccess() {
-                            Log.e("mytag", "onSuccess");
-
-                            PhotoLoadet event = new PhotoLoadet();
-                            OttoBus.get().post(event);
+                            OttoBus.get().post(new PhotoLoadet());
                         }
 
                         @Override
@@ -116,7 +112,6 @@ public class PhotoGridAdapter extends BaseAdapter {
 
         totalHeight += 10;
 
-        Log.e("mytag", "totalHeight = " + totalHeight);
         ViewGroup.LayoutParams params = gridView.getLayoutParams();
         params.height = totalHeight;
         gridView.setLayoutParams(params);

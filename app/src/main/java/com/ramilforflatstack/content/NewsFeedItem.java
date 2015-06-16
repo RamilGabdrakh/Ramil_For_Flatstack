@@ -1,5 +1,12 @@
 package com.ramilforflatstack.content;
 
+import com.activeandroid.query.Select;
+import com.ramilforflatstack.model.Autor;
+import com.ramilforflatstack.model.FeedItem;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by ramil-g on 14.06.15.
  */
@@ -31,7 +38,7 @@ public class NewsFeedItem {
         if (shortMessage.length() > MESSAGE_MAX_LENGTH) {
             shortMessage = shortMessage.substring(0, MESSAGE_MAX_LENGTH) + "...";
         }
-        return  shortMessage;
+        return shortMessage;
     }
 
     public String getTitle() {
@@ -52,5 +59,27 @@ public class NewsFeedItem {
 
     public long getAutorId() {
         return autorId;
+    }
+
+    public static List<NewsFeedItem> getNewsFeedItem(long endTime, int limit) {
+        List<NewsFeedItem> result = new ArrayList<>();
+
+        List<FeedItem> feedItems = new Select()
+                .from(FeedItem.class)
+                .where("Date < ?", endTime)
+                .orderBy("Date DESC")
+                .limit(limit)
+                .execute();
+
+        for (FeedItem feedItem : feedItems) {
+            Autor autor = Autor.getById(feedItem.getSourceId());
+
+            NewsFeedItem item = new NewsFeedItem(feedItem.getPostId(), feedItem.getSourceId(),
+                    feedItem.getText(), autor.getName(), autor.getPhotoUrl(), feedItem.getDate());
+
+            result.add(item);
+        }
+
+        return result;
     }
 }

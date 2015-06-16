@@ -1,11 +1,13 @@
 package com.ramilforflatstack.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.ramilforflatstack.BuildConfig;
 import com.ramilforflatstack.R;
+import com.ramilforflatstack.tools.NetworkUtils;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
@@ -14,12 +16,16 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKCaptchaDialog;
 
 import droidkit.annotation.InjectView;
+import droidkit.util.Sequence;
 
 
 public class MainActivity extends VkActivity {
 
     @InjectView(R.id.progressBar)
     CircleProgressBar progressBar;
+
+    public static int NEWS_FEED_REQUEST = Sequence.get().nextInt();
+    public static int REAUHTORIZE = Sequence.get().nextInt();
 
     private static final String[] sMyScope = new String[]{
             VKScope.WALL,
@@ -70,15 +76,30 @@ public class MainActivity extends VkActivity {
         progressBar.setShowArrow(true);
 
         VKSdk.initialize(mListener, Long.toString(BuildConfig.VK_API_KEY));
-        if (VKSdk.isLoggedIn()) {
+
+
+        if (!NetworkUtils.isNetworkAvailable(this) || VKSdk.isLoggedIn() || VKSdk.wakeUpSession()) {
             openNewsFeedActivity();
         } else {
             VKSdk.authorize(sMyScope);
         }
+
     }
 
-    private void openNewsFeedActivity(){
+    private void openNewsFeedActivity() {
         finish();
-        NewsFeedActivity.start(this);
+        NewsFeedActivity.start(this, NEWS_FEED_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NEWS_FEED_REQUEST) {
+            if (resultCode == REAUHTORIZE) {
+                VKSdk.authorize(sMyScope);
+            } else {
+                finish();
+            }
+        }
     }
 }
