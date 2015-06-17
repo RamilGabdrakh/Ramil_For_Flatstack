@@ -1,6 +1,0 @@
-<resources>
-    <style name="ToolBarStyle" parent="">
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:elevation">@dimen/elevation</item>
-    </style>
-</resources>

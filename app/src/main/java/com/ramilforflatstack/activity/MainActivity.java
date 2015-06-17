@@ -87,8 +87,7 @@ public class MainActivity extends VkActivity {
     }
 
     private void openNewsFeedActivity() {
-        finish();
-        NewsFeedActivity.start(this, NEWS_FEED_REQUEST);
+        NewsFeedActivity.startForResult(this, NEWS_FEED_REQUEST);
     }
 
     @Override

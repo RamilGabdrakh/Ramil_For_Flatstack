@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.ramilforflatstack.R;
 import com.ramilforflatstack.fragment.NewsFullFragment;
@@ -30,7 +31,7 @@ public class NewsActivity extends VkActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_news_feed);
+        setContentView(R.layout.act_news);
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_36dp);
 
@@ -40,5 +41,14 @@ public class NewsActivity extends VkActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment, NewsFullFragment.class.getName())
                 .commit();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
