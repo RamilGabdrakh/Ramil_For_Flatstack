@@ -43,6 +43,9 @@ public class NewsFullFragment extends Fragment {
     @InjectView(R.id.message)
     TextView mMessage;
 
+    @InjectView(R.id.like_count)
+    TextView mLikeCount;
+
     private PhotoGridAdapter mAdapter;
 
     @Override
@@ -67,6 +70,7 @@ public class NewsFullFragment extends Fragment {
                 .into(mCover);
         mTitle.setText(content.getTitle());
         mMessage.setText(content.getMessage());
+        mLikeCount.setText(Long.toString(content.getLikeCount()));
 
         String date = DateUtils.getTextDate(content.getDate());
         mDate.setText(date);
